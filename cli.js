@@ -38,10 +38,12 @@ async function run() {
 	const stream = fs.createWriteStream(cli.flags.output);
 
 	stream.write(
-		`> **Found \`${data.totals.errors} errors, ${data.totals.warnings} warnings\` - Generated on ${new Date(Date.now()).toUTCString()}.**\n`
+		`> **Found \`${data.totals.errors} errors, ${
+			data.totals.warnings
+		} warnings\` - Generated on ${new Date(Date.now()).toUTCString()}.**\n`
 	);
 
-	stream.write( '---\n');
+	stream.write("---\n");
 
 	for (const file in data.files) {
 		const result = data.files[file];
@@ -49,7 +51,7 @@ async function run() {
 			continue;
 		}
 		stream.write(
-			`#### :clipboard: \`${file}\` - :small_red_triangle: ${result.errors} errors & :small_orange_diamond: ${result.warnings} warnings\n`
+			`#### :clipboard: \`${file.replace("/github/workspace/", "")}\` - :small_red_triangle: ${result.errors} errors & :small_orange_diamond: ${result.warnings} warnings\n`
 		);
 		stream.write(`| # | Type | Message | Severity |\n`);
 		stream.write(`| --- | --- | --- | --- |\n`);
