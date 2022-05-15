@@ -30,14 +30,12 @@ async function run() {
 		const json = fs.readFileSync(cli.flags.path, "utf-8");
 		data = JSON.parse(json);
 	} catch (err) {
-		console.log(err);
 		console.log("Error: Can not read the JSON file.");
+		console.log(err);
 		process.exit(1);
 	}
 
 	const stream = fs.createWriteStream(cli.flags.output);
-
-	console.log(data.totals, data.files);
 
 	stream.write(
 		`> **Found \`${data.totals.errors} errors, ${data.totals.warnings} warnings\` - Generated on ${new Date(Date.now()).toUTCString()}.**\n`
