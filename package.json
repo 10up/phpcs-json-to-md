@@ -1,14 +1,20 @@
 {
-  "name": "phpcs-json-to-md",
+  "name": "@10up/phpcs-json-to-md",
   "version": "1.0.0",
   "description": "Convert PHPCS JSON report to a Markdown file",
-  "main": "cli.js",
   "author": {
     "name": "10up",
     "email": "opensource@10up.com",
     "url": "https://10up.com"
   },
   "type": "module",
+  "main": "cli.js",
+	"bin": {
+		"phpcs-json-to-md": "cli.js"
+	},
+	"files": [
+		"cli.js"
+	],
   "engines": {
     "node": ">=12"
   },
