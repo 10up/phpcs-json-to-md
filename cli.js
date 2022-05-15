@@ -25,6 +25,26 @@ async function run() {
 		}
 	);
 
+	const getDisplayPath = (filePath, label = "", line = 0) => {
+		filePath = filePath.replace("/github/workspace/", "");
+
+		if (!label) {
+			label = filePath;
+		}
+
+		if (!process.env.GITHUB_SHA || !process.env.GITHUB_REPOSITORY) {
+			return label;
+		}
+
+		let url = `https://github.com/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`;
+
+		if (line) {
+			url += `#L${line}`;
+		}
+
+		return `[${label}](${url})`;
+	};
+
 	let data;
 	try {
 		const json = fs.readFileSync(cli.flags.path, "utf-8");
@@ -51,14 +71,16 @@ async function run() {
 			continue;
 		}
 		stream.write(
-			`#### :clipboard: \`${file.replace("/github/workspace/", "")}\` - :small_red_triangle: ${result.errors} errors & :small_orange_diamond: ${result.warnings} warnings\n`
+			`#### :clipboard: ${getDisplayPath(file)} - :small_red_triangle: ${
+				result.errors
+			} errors & :small_orange_diamond: ${result.warnings} warnings\n`
 		);
 		stream.write(`| # | Type | Message | Severity |\n`);
 		stream.write(`| --- | --- | --- | --- |\n`);
 
 		result.messages.map((message) => {
 			stream.write(
-				`| ${message.line} | ${message.type} | ${message.message} (\`${message.source}\`) | ${message.severity} |\n`
+				`| ${getDisplayPath(file, message.line, message.line)} | ${message.type} | ${message.message} (\`${message.source}\`) | ${message.severity} |\n`
 			);
 		});
 	}
